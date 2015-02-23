@@ -25,7 +25,11 @@ class ClassRoomSpider:
     base_url = 'http://202.114.5.131/'
 
     def __init__(self):
-        self.driver = webdriver.PhantomJS(service_args=['--load-images=no'])
+        self.driver = webdriver.PhantomJS(
+            service_args=['--load-images=no'],
+            service_log_path='/var/www/wwwlog/hust_ghostdriver.log',
+            executable_path='/usr/local/lib/node_modules/phantomjs/lib/phantom/bin/phantomjs'
+        )
         self.driver.get(self.base_url)
         # self.driver.implicitly_wait(2)
         self.wait = WebDriverWait(self.driver, 30)
