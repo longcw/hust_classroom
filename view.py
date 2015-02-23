@@ -27,15 +27,23 @@ def classroom(building='d9', date='0'):
         spider = ClassRoomSpider()
         classroom_obj = spider.get_and_save(date_str, building)
 
-    title = u'%s教室-%s' % (building, date_str)
     current = {
         'building': building,
         'date': date
     }
+    building_names = {
+        'd9': u'东九',
+        'd12': u'东十二',
+        'x5': u'西五',
+        'x12': u'西十二',
+        'd5': u'东五'
+    }
+    title = u'%s-%s' % (building_names[building], date_str)
     return render_template(
         'classroom.html',
         title=title,
         classroom=classroom_obj,
         buildings=Buildings,
-        current=current
+        current=current,
+        building_names=building_names
     )

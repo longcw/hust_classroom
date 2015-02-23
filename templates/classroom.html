@@ -18,7 +18,9 @@
                 <ul class="nav navbar-nav">
                     {% for building in buildings %}
                         <li{{ ' class="active"' | safe if building == current.building}}>
-                            <a href="{{ url_for('classroom', building=building, date=current.date) }}">{{ building }}</a>
+                            <a href="{{ url_for('classroom', building=building, date=current.date) }}">
+                                {{ building_names[building] }}
+                            </a>
                         </li>
                     {% endfor %}
 
@@ -27,15 +29,15 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">日期
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">{{ classroom.update_time }}更新</li>
+                            <li class="divider"></li>
                             {% for i in range(-1, 2) %}
                             <li{{ ' class="active"' | safe if current.date == i }}>
-                                <a href="{{ url_for('classroom', building=current.building, date=i) }}">{{ i }}</a>
+                                <a href="{{ url_for('classroom', building=current.building, date=i) }}">
+                                    {{ '%d天后'%i if i >0 else ('%d天前'%-i if i < 0 else '今天') }}
+                                </a>
                             </li>
                             {% endfor %}
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Nav header</li>
-                            <li><a href="#">Separated link</a></li>
-                            <li><a href="#">One more separated link</a></li>
                         </ul>
                     </li>
                 </ul>
