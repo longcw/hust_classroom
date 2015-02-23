@@ -2,10 +2,8 @@
 
 .idea
 
-env/local
-env/lib
-env/include
-env/bin
 
-ghostdriver.log
+env
+server_config
+
 classroom.db
