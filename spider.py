@@ -23,9 +23,9 @@ Buildings = {
 
 class ClassRoomSpider:
     base_url = 'http://202.114.5.131/'
-    driver = webdriver.Firefox()
 
     def __init__(self):
+        self.driver = webdriver.PhantomJS(service_args=['--load-images=no'])
         self.driver.get(self.base_url)
         # self.driver.implicitly_wait(2)
         self.wait = WebDriverWait(self.driver, 30)
@@ -57,13 +57,17 @@ class ClassRoomSpider:
 
         # 删除以前的数据
         if len(self.driver.find_elements_by_id('gvMain')) > 0:
-            self.driver.execute_script('document.getElementById("gvMain").remove();')
+            js = '''
+                var element = document.getElementById("%s");
+                element.parentNode.removeChild(element);
+            ''' % 'gvMain'
+            self.driver.execute_script(js)
         self.driver.find_element_by_id('btSearch').click()
         table = self.wait.until(
             EC.presence_of_element_located((By.ID, 'gvMain'))
         )
         data = unicode(table.get_attribute('innerHTML'))
-        return data.replace('<td>&nbsp;</td>', '<td style="background-color:#00CC66;">&nbsp;</td>')
+        return data.replace('<td>&nbsp;</td>', u'<td style="background-color:#00CC66;">自习</td>')
 
     def get_and_save(self, date, building_key):
         return ClassRoom.save_data(date, building_key, self.get_classroom(date, Buildings[building_key]))
@@ -82,6 +86,7 @@ class ClassRoomSpider:
         self.driver.close()
 
 if __name__ == '__main__':
+    print('starting')
     spider = ClassRoomSpider()
     print('spider init successfully')
     for after in [0, 1]:

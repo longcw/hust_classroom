@@ -1,8 +1,11 @@
 # Created by .ignore support plugin (hsz.mobi)
 
-local
-lib
-include
-bin
-application/ghostdriver.log
-application/classroom.db
+.idea
+
+env/local
+env/lib
+env/include
+env/bin
+
+ghostdriver.log
+classroom.db
