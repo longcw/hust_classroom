@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from models import ClassRoom
+from models import ClassRoom, db
 
 Buildings = {
     'd12': '1',
@@ -94,7 +94,12 @@ if __name__ == '__main__':
     print('starting')
     spider = ClassRoomSpider()
     print('spider init successfully')
-    for after in [0, 1]:
-        for k, v in Buildings.iteritems():
-            item = spider.get_and_save(spider.get_date(after), k)
-            print('save %s on %s' % (item.date, k))
+    db.connect()
+    try:
+        for after in [0, 1]:
+            for k, v in Buildings.iteritems():
+                item = spider.get_and_save(spider.get_date(after), k)
+                print('save %s on %s' % (item.date, k))
+    finally:
+        db.close()
+        print('database closed')
