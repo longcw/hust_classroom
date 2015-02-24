@@ -71,7 +71,8 @@ class ClassRoomSpider:
             EC.presence_of_element_located((By.ID, 'gvMain'))
         )
         data = unicode(table.get_attribute('innerHTML'))
-        return data.replace('<td>&nbsp;</td>', u'<td style="background-color:#00CC66;">自习</td>')
+        return data.replace('<td>&nbsp;</td>', u'<td style="background-color:#00CC66;">自习</td>')\
+            .replace(u'学院', '').replace(u'节', '', 5)
 
     def get_and_save(self, date, building_key):
         return ClassRoom.save_data(date, building_key, self.get_classroom(date, Buildings[building_key]))
