@@ -1,12 +1,23 @@
 # coding: utf-8
 
-from app import myapp
+from app import myapp, db
 from models import ClassRoom
 from spider import ClassRoomSpider, Buildings
 
 from flask import *
 from peewee import DoesNotExist
 
+
+@myapp.before_request
+def before_request():
+    g.db = db
+    g.db.connect()
+    # db.create_tables([ClassRoom], safe=True)
+
+
+@myapp.teardown_request
+def teardown_request(exception):
+    g.db.close()
 
 @myapp.route('/')
 def index():
