@@ -91,7 +91,7 @@ class ClassRoomSpider:
         self.driver.close()
 
 if __name__ == '__main__':
-    print('starting')
+    print('starting at %s' % time.strftime('%Y-%m-%d %H:%M:%S'))
     spider = ClassRoomSpider()
     print('spider init successfully')
     db.connect()
