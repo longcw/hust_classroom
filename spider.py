@@ -95,11 +95,14 @@ if __name__ == '__main__':
     spider = ClassRoomSpider()
     print('spider init successfully')
     db.connect()
-    try:
-        for after in [0, 1]:
-            for k, v in Buildings.iteritems():
+
+    for after in [0, 1]:
+        for k, v in Buildings.iteritems():
+            try:
+                db.connect()
                 item = spider.get_and_save(spider.get_date(after), k)
-                print('save %s on %s' % (item.date, k))
-    finally:
-        db.close()
-        print('database closed')
+            finally:
+                db.close()
+            print('save %s on %s' % (item.date, k))
+
+    print('database closed')
