@@ -71,8 +71,7 @@ class ClassRoomSpider:
             EC.presence_of_element_located((By.ID, 'gvMain'))
         )
         data = unicode(table.get_attribute('innerHTML'))
-        return data.replace('<td>&nbsp;</td>', u'<td style="background-color:#00CC66;">自习</td>')\
-            .replace(u'学院', '').replace(u'节', '', 5)
+        return data.replace('<td>&nbsp;</td>', u'<td style="background-color:#00CC66;">自习</td>')
 
     def get_and_save(self, date, building_key):
         return ClassRoom.save_data(date, building_key, self.get_classroom(date, Buildings[building_key]))
@@ -94,9 +93,8 @@ if __name__ == '__main__':
     print('starting at %s' % time.strftime('%Y-%m-%d %H:%M:%S'))
     spider = ClassRoomSpider()
     print('spider init successfully')
-    db.connect()
 
-    for after in [0, 1]:
+    for after in range(0, 2):
         for k, v in Buildings.iteritems():
             try:
                 db.connect()
