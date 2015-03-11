@@ -48,7 +48,11 @@
 {% endblock %}
 
 {% block body %}
+
     <div>
+        <div class="alert alert-success" role="alert" style="margin-bottom: 0">
+            如果觉得这个小网站还挺好用的，欢迎推荐给你身边的朋友^_^
+        </div>
         <table class="table table-bordered">
             {{ classroom.data|safe }}
         </table>
