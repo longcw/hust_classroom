@@ -31,12 +31,12 @@ class ClassRoomSpider:
             service_log_path='/var/www/wwwlog/hust_ghostdriver.log',
             executable_path='/usr/local/lib/node_modules/phantomjs/lib/phantom/bin/phantomjs'
         )
-        self.driver.get(self.base_url)
-        logging.info('spider init successful')
-        # self.driver.implicitly_wait(2)
         self.wait = WebDriverWait(self.driver, 30)
 
     def get_classroom(self, date, building):
+        self.driver.get(self.base_url)
+        logging.info('spider init successful')
+
         logging.info('start getting %s on %s' % (building, date))
         # 设置时间
         date_input = self.driver.find_element_by_id('datepicker')
@@ -100,23 +100,24 @@ class ClassRoomSpider:
         date = datetime.datetime.now() + datetime.timedelta(days=after)
         return date.strftime('%Y/%m/%d')
 
-    def __del__(self):
-        self.driver.close()
 
 if __name__ == '__main__':
     logging.info('starting')
     print('starting at %s' % time.strftime('%Y-%m-%d %H:%M:%S'))
     spider = ClassRoomSpider()
     print('spider init successfully at %s' % time.strftime('%Y-%m-%d %H:%M:%S'))
-    for after in range(0, 2):
-        for k, v in Buildings.iteritems():
-            date = spider.get_date(after)
-            data = spider.get_classroom(date, Buildings[k])
-            try:
-                db.connect()
-                ClassRoom.save_data(date, k, data)
-            finally:
-                db.close()
-            print('save %s -> %s at %s' % (date, k, time.strftime('%Y-%m-%d %H:%M:%S')))
-    logging.info('update successful')
-    print('update completed at %s' % time.strftime('%Y-%m-%d %H:%M:%S'))
+    try:
+        for after in range(0, 2):
+            for k, v in Buildings.iteritems():
+                date = spider.get_date(after)
+                data = spider.get_classroom(date, Buildings[k])
+                try:
+                    db.connect()
+                    ClassRoom.save_data(date, k, data)
+                finally:
+                    db.close()
+                print('save %s -> %s at %s' % (date, k, time.strftime('%Y-%m-%d %H:%M:%S')))
+        logging.info('update successful')
+        print('update completed at %s' % time.strftime('%Y-%m-%d %H:%M:%S'))
+    finally:
+        spider.driver.quit()
